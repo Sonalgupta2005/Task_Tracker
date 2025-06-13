@@ -44,6 +44,17 @@ public class TaskService {
 		// TODO Auto-generated method stub
 		return repository.findByCompletedFalse();
 	}
+	 public List<Task> filterTasksByStatus(String status) {
+	        if (status == null || status.equalsIgnoreCase("all")) {
+	            return repository.findAll();
+	        } else if (status.equalsIgnoreCase("completed")) {
+	            return repository.findByCompleted(true);
+	        } else if (status.equalsIgnoreCase("incomplete")) {
+	            return repository.findByCompleted(false);
+	        }
+	        return List.of();
+	    }
+	
 
 }
 

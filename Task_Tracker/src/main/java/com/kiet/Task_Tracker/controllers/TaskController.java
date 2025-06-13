@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kiet.Task_Tracker.services.TaskService;
 import com.kiet.model.Task;
@@ -25,7 +26,7 @@ public class TaskController {
 	public String getStudent(Model model,@PathVariable int id) {
 		Task task=service.retrieveById(id);
 		model.addAttribute("task",task);
-		return "demo";
+		return "index";
 	}
 	@GetMapping("/")
 	public String getAllTasks(Model model) {
@@ -33,6 +34,8 @@ public class TaskController {
 		model.addAttribute("tasks",tasks);
 		return "index";
 	}
+	
+
 	@GetMapping("/task/status/incomplete")
 	public String getIncompleteTasks(Model model) {
 		List<Task> incompleteTasks=service.retrieveIncompleteTasks();
@@ -60,5 +63,12 @@ public class TaskController {
 		service.removeById(id);
 		return "redirect:/";
 	}
+	@GetMapping("/tasks/filter")
+	public String filterTasks(@RequestParam(required = false) String status, Model model) {
+	    List<Task> filteredTasks = service.filterTasksByStatus(status);
+	    model.addAttribute("tasks", filteredTasks);
+	    return "index";
+	}
+
 }
 

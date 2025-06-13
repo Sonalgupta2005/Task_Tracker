@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,6 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-			
         }
 
         h1 {
@@ -72,54 +71,78 @@
         .btn-danger:hover {
             background-color: #c82333;
         }
-		.addbtn{
-			justify-content:flex-end;
-		}
-		.anchor{
-			width:100%;
-			display:flex;
-		}
+
+        .addbtn {
+            justify-content: flex-end;
+        }
+
+        .anchor {
+            
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container ">
-		<div class="anchor">
-        <a th:href="@{/addTask}" class="btn btn-primary addbtn">Add Task</a>
-        <a th:href="@{/task/status/incomplete}" class="btn btn-secondary">Show Incomplete Tasks</a>
-		</div>
-        <h1>Tasks Information</h1>
+<div class="container">
+    <div class="anchor">
+        <div>
+            <a th:href="@{/addTask}" class="btn btn-primary">Add Task</a>
+            
+        </div>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Task ID</th>
-                    <th>Task Title</th>
-                    <th>Task Due Date</th>
-                    <th>Completion Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="task:${tasks}">
-                    <td th:text="${task.id}"></td>
-                    <td th:text="${task.title}"></td>
-                    <td th:text="${task.dueDate}"></td>
-                    
-					<td>
-					    <span th:if="${task.completed}" class="status-completed">Completed</span>
-					    <span th:unless="${task.completed}" class="status-incomplete">Incomplete</span>
-					</td>
-
-                    <td>
-                        <a th:href="@{/showFormUpdate/{id}(id=${task.id})}" class="btn btn-primary">Update</a>
-                        <a th:href="@{/delete/task/{id}(id=${task.id})}" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Filter form -->
+        <form method="get" action="/tasks/filter" class="filter-form">
+            <label for="status">Filter by Status:</label>
+            <select name="status" id="status" class="form-control">
+                <option value="all" th:selected="${param.status == null or param.status == 'all'}">All</option>
+                <option value="completed" th:selected="${param.status == 'completed'}">Completed</option>
+                <option value="incomplete" th:selected="${param.status == 'incomplete'}">Incomplete</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </form>
     </div>
+
+    <h1>Tasks Information</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Task ID</th>
+                <th>Task Title</th>
+                <th>Task Due Date</th>
+                <th>Completion Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.id}"></td>
+                <td th:text="${task.title}"></td>
+                <td th:text="${task.dueDate}"></td>
+                <td>
+                    <span th:if="${task.completed}" class="text-success font-weight-bold">Completed</span>
+                    <span th:unless="${task.completed}" class="text-danger font-weight-bold">Incomplete</span>
+                </td>
+                <td>
+                    <a th:href="@{/showFormUpdate/{id}(id=${task.id})}" class="btn btn-primary">Update</a>
+                    <a th:href="@{/delete/task/{id}(id=${task.id})}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 

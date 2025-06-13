@@ -10,6 +10,6 @@ import com.kiet.model.Task;
 @Repository
 public interface TaskRepository extends JpaRepository<Task,Integer> {
 	List<Task> findByCompletedFalse();
-
+	List<Task> findByCompleted(Boolean completed);
 	
 }
